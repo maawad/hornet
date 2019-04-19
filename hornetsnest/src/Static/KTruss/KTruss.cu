@@ -16,6 +16,8 @@ void kTrussOneIteration(HornetGraph& hornet,
 
 KTruss::KTruss(HornetGraph& hornet) : StaticAlgorithm(hornet) {
     hd_data().active_queue.initialize(hornet);
+
+    init();
 }
 
 KTruss::~KTruss() {

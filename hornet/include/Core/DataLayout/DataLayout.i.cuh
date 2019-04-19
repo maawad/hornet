@@ -262,7 +262,7 @@ void SoA<TArgs...>::initialize(const void* (&array)[sizeof...(TArgs)],
     auto allocated_items = xlib::upper_approx<512>(num_items);
     gpu::allocate(_d_ptr, allocated_items);
 
-    for (int i = 0; i < NUM_ARGS; i++) {
+    for (int i = 0; i < int(NUM_ARGS); i++) {
         auto d_ptr = reinterpret_cast<byte_t*>(_d_ptr) +  _pitch * i;
         host::copyToDevice(static_cast<const byte_t*>(array[i]),
                          allocated_items * TYPE_SIZES[i], d_ptr);
