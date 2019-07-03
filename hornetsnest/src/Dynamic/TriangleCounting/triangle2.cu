@@ -17,7 +17,7 @@ New Orleans, Louisiana, 2014
 #include <cuda.h>
 #include <cuda_runtime.h>
 
-#include "Static/TriangleCounting/triangle2.cuh"
+#include "Dynamic/TriangleCounting/triangle2.cuh"
 
 namespace hornets_nest {
 

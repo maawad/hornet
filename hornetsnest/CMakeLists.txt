@@ -55,4 +55,4 @@ add_executable(dTC      test/DynamicTriangleTest2.cu)
 #target_link_libraries(bc         hornetAlg hornet)
 #target_link_libraries(kcore      hornetAlg hornet)
 
-target_link_libraries(dTC      test/DynamicTriangleTest2.cu)
+target_link_libraries(dTC 		  hornetAlg hornet)

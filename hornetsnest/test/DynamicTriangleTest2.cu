@@ -11,7 +11,7 @@
 #include <Util/CommandLineParam.hpp>
 #include <cuda_profiler_api.h> //--profile-from-start off
 
-#include "Static/TriangleCounting/triangle2.cuh"
+#include "Dynamic/TriangleCounting/triangle2.cuh"
 
 using namespace timer;
 using namespace hornets_nest;
@@ -84,10 +84,16 @@ int exec(int argc, char* argv[]) {
     using namespace graph::structure_prop;
     using namespace graph::parsing_prop;
 
-    graph::GraphStd<vid_t, eoff_t> graph(UNDIRECTED);
-    graph.read(argv[1], DIRECTED_BY_DEGREE | PRINT_INFO | SORT);
-    HornetInit hornet_init(graph.nV(), graph.nE(), graph.csr_out_offsets(),
-                           graph.csr_out_edges());
+    graph::GraphStd<vid_t, eoff_t> all_graph(UNDIRECTED);
+    all_graph.read(argv[1], DIRECTED_BY_DEGREE | PRINT_INFO | SORT);
+
+    graph::GraphStd<vid_t, eoff_t> pari_graph(UNDIRECTED);
+
+
+    HornetInit hornet_init(pari_graph.nV(), 
+                           pari_graph.nE(), 
+                           pari_graph.csr_out_offsets(),
+                           pari_graph.csr_out_edges());
 
     HornetGraph hornet_graph(hornet_init);
     TriangleCounting2 tc(hornet_graph);
