@@ -416,7 +416,7 @@ void TriangleCounting::setInitParameters(int threadBlocks, int blockSize, int th
         hd_triangleData().blockSize = (hd_triangleData().blockSize/32)*32;
     }
     if(hd_triangleData().blockSize < 0){
-        printf("The block size has to be a positive numbe\n");
+        printf("The block size has to be a positive number\n");
         exit(0);
     }
     

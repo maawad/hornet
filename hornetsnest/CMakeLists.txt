@@ -32,13 +32,17 @@ add_library(hornetAlg ${CU_SRCS})
 #add_executable(sssp       test/SSSPTest.cu)
 #add_executable(katz       test/KatzTest.cu)
 #add_executable(dyn-katz   test/KatzDynamicTest.cu)
-#add_executable(triangle   test/TriangleTest.cu)
 #add_executable(triangle2  test/TriangleTest2.cu)
 #add_executable(clus-coeff test/ClusCoeffTest.cu)
 #add_executable(pr         test/PageRankTest.cu)
 #add_executable(bc         test/BCTest.cu)
 #add_executable(kcore      test/KCoreTest.cu)
+
+add_executable(triangle   test/TriangleTest.cu)
 add_executable(ktruss      test/KTrussTest.cu)
+
+###################################################################################################
+#
 
 #target_link_libraries(bfs        hornetAlg hornet)
 #target_link_libraries(bfs2       hornetAlg hornet)
@@ -47,10 +51,11 @@ add_executable(ktruss      test/KTrussTest.cu)
 #target_link_libraries(sssp       hornetAlg hornet)
 #target_link_libraries(katz       hornetAlg hornet)
 #target_link_libraries(dyn-katz   hornetAlg hornet)
-#target_link_libraries(triangle   hornetAlg hornet)
 #target_link_libraries(triangle2  hornetAlg hornet)
 #target_link_libraries(clus-coeff hornetAlg hornet)
 #target_link_libraries(pr         hornetAlg hornet)
 #target_link_libraries(bc         hornetAlg hornet)
 #target_link_libraries(kcore      hornetAlg hornet)
+
+target_link_libraries(triangle   hornetAlg hornet)
 target_link_libraries(ktruss      hornetAlg hornet)

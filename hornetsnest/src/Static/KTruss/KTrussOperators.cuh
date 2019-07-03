@@ -2,6 +2,7 @@
 
 namespace hornets_nest {
 
+
 struct Init {
     HostDeviceVar<KTrussData> kt;
 
