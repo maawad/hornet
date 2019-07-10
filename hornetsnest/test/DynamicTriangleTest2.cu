@@ -19,6 +19,10 @@ using namespace hornets_nest;
 using HornetGraph = gpu::Hornet<EMPTY, EMPTY>;
 
 
+#include "Core/GPUHornet/BatchUpdate.cuh"
+#include "Util/BatchFunctions.hpp"
+using namespace gpu::batch_property;
+
 // CPU Version - assume sorted index lists. 
 int hostSingleIntersection (const vid_t ai, const degree_t alen, const vid_t * a,
                             const vid_t bi, const degree_t blen, const vid_t * b){
@@ -87,30 +91,49 @@ int exec(int argc, char* argv[]) {
     graph::GraphStd<vid_t, eoff_t> all_graph(UNDIRECTED);
     all_graph.read(argv[1], DIRECTED_BY_DEGREE | PRINT_INFO | SORT);
 
-    graph::GraphStd<vid_t, eoff_t> pari_graph(UNDIRECTED);
+    graph::GraphStd<vid_t, eoff_t> part_graph(UNDIRECTED);
 
 
-    HornetInit hornet_init(pari_graph.nV(), 
-                           pari_graph.nE(), 
-                           pari_graph.csr_out_offsets(),
-                           pari_graph.csr_out_edges());
+    HornetInit hornet_init(part_graph.nV(), 
+                           part_graph.nE(), 
+                           part_graph.csr_out_offsets(),
+                           part_graph.csr_out_edges());
 
     HornetGraph hornet_graph(hornet_init);
     TriangleCounting2 tc(hornet_graph);
     tc.init();
     
-    int work_factor;
-    if (argc > 2) {
-        work_factor = atoi(argv[2]);
-    } else {
-        work_factor = 1;
+    uint32_t batch_size = part_graph.nE();
+    uint32_t num_batches = 1;
+    if (argc > 2){
+        batch_size = atoi(argv[2]);
+    }    
+    if (argc > 3){
+        num_batches = atoi(argv[3]);
+    }    
+
+    int work_factor = 1;
+    if (argc > 4) {
+        work_factor = atoi(argv[4]);
     }
+
+    vid_t* batch_src, *batch_dst;
+    host::allocatePageLocked(batch_src, batch_size);
+    host::allocatePageLocked(batch_dst, batch_size);
+
 
     Timer<DEVICE> TM(5);
     //cudaProfilerStart();
     TM.start();
 
-    tc.run(work_factor);
+    for (uint32_t i = 0; i < num_batches; ++i)
+    {
+        Timer<DEVICE> iTM(5);
+        iTM.start();
+        tc.run(work_factor);
+        iTM.stop();
+        iTM.print("batch " + std::to_string(i));
+    }
 
     TM.stop();
     //cudaProfilerStop();
